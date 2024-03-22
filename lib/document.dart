@@ -1,12 +1,13 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
-
-
 class DocumentVerificationPage extends StatefulWidget {
-  static File? selectedImage;
+  static File? selectedLogo;
+  static File? certificateOfIncorporation;
+  static File? businessPanCard;
 
   @override
   _DocumentVerificationPageState createState() => _DocumentVerificationPageState();
@@ -14,9 +15,8 @@ class DocumentVerificationPage extends StatefulWidget {
 
 class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
   File? _selectedImage;
-  File? _tenthMarksheet;
-  File? _twelfthMarksheet;
-  File? _resume;
+  File? _certificateOfIncorporation;
+  File? _businessPanCard;
   TextEditingController _aadharController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
@@ -26,12 +26,12 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
     if (pickedImage != null) {
       setState(() {
         _selectedImage = File(pickedImage.path);
-        DocumentVerificationPage.selectedImage = _selectedImage;
+        DocumentVerificationPage.selectedLogo = _selectedImage;
       });
     }
   }
 
-  Future<void> _get10thMarksheet() async {
+  Future<void> _getCertificateOfIncorporation() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'doc', 'txt'],
@@ -39,12 +39,13 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
 
     if (result != null) {
       setState(() {
-        _tenthMarksheet = File(result.files.single.path!);
+        _certificateOfIncorporation = File(result.files.single.path!);
+        DocumentVerificationPage.certificateOfIncorporation = _certificateOfIncorporation;
       });
     }
   }
 
-  Future<void> _get12thMarksheet() async {
+  Future<void> _getBusinessPanCard() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'doc', 'txt'],
@@ -52,20 +53,8 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
 
     if (result != null) {
       setState(() {
-        _twelfthMarksheet = File(result.files.single.path!);
-      });
-    }
-  }
-
-  Future<void> _getResume() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'txt'],
-    );
-
-    if (result != null) {
-      setState(() {
-        _resume = File(result.files.single.path!);
+        _businessPanCard = File(result.files.single.path!);
+        DocumentVerificationPage.businessPanCard = _businessPanCard;
       });
     }
   }
@@ -75,7 +64,6 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
     // You can use the gathered data like _selectedImage, _aadharController.text, etc.
 
     // Navigate to the ProfilePage after submitting the application
-
   }
 
   @override
@@ -101,7 +89,7 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               SizedBox(height: 20.0),
 
               Text(
-                'Upload Photo',
+                'Upload Logo',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -115,8 +103,10 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
                 child: CircleAvatar(
                   radius: 50.0,
                   backgroundColor: Colors.grey[300],
-                  backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
-                  child: _selectedImage == null
+                  backgroundImage: DocumentVerificationPage.selectedLogo != null
+                      ? FileImage(DocumentVerificationPage.selectedLogo!)
+                      : null,
+                  child: DocumentVerificationPage.selectedLogo == null
                       ? Icon(
                     Icons.camera_alt,
                     size: 40.0,
@@ -129,7 +119,7 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               SizedBox(height: 20.0),
 
               Text(
-                'Aadhar Card Number',
+                'Name of Business',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -139,7 +129,7 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               TextField(
                 controller: _aadharController,
                 decoration: InputDecoration(
-                  hintText: 'Enter Aadhar Card Number',
+                  hintText: 'Business name',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -165,7 +155,25 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               SizedBox(height: 20.0),
 
               Text(
-                'Upload 10th Marksheet',
+                'Website',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              TextField(
+                controller: _addressController,
+                decoration: InputDecoration(
+                  hintText: 'Link',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
+              SizedBox(height: 20.0),
+
+              Text(
+                'Upload Certificate of Incorporation',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -175,7 +183,7 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               SizedBox(height: 10.0),
 
               InkWell(
-                onTap: _get10thMarksheet,
+                onTap: _getCertificateOfIncorporation,
                 child: Container(
                   height: 100.0,
                   width: double.infinity,
@@ -196,7 +204,7 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               SizedBox(height: 20.0),
 
               Text(
-                'Upload 12th Marksheet',
+                'Upload Business Pan Card',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -206,38 +214,7 @@ class _DocumentVerificationPageState extends State<DocumentVerificationPage> {
               SizedBox(height: 10.0),
 
               InkWell(
-                onTap: _get12thMarksheet,
-                child: Container(
-                  height: 100.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey[300],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.cloud_upload,
-                      size: 40.0,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 20.0),
-
-              Text(
-                'Upload Resume',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              SizedBox(height: 10.0),
-
-              InkWell(
-                onTap: _getResume,
+                onTap: _getBusinessPanCard,
                 child: Container(
                   height: 100.0,
                   width: double.infinity,

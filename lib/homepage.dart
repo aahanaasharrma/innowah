@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                       title: 'Carpooling',
                       icon: 'carpool.png',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CarRoute()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CarRoute(destination: '',)));
                       },
                     ),
                     SizedBox(width: 40),

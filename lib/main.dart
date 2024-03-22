@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:innowah/aboutus.dart';
 import 'package:innowah/car_route.dart';
 import 'package:innowah/carbonpage.dart';
+import 'package:innowah/carpool.dart';
+import 'package:innowah/document.dart';
 import 'package:innowah/eventspage.dart';
 import 'package:innowah/getstarted.dart';
 import 'package:innowah/profilepage.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ScheduleRidePage(),
+      home: CarpoolScreen(),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:innowah/getstarted.dart';
 import 'package:innowah/profilepage.dart';
 import 'package:innowah/rentals_page.dart';
 import 'package:innowah/rewards_page.dart';
+import 'package:innowah/schedule_ride.dart';
 import 'homepage.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: GetStarted(),
+      home: ScheduleRidePage(),
     );
   }
 }

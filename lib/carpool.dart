@@ -226,17 +226,19 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          'Inbox Content',
-          style: TextStyle(
-            fontSize: 22.0,
-            fontWeight: FontWeight.bold,
-          ),
+
+        SizedBox(height: 20), // Add some space between text and image
+        Image.asset(
+          'assets/images/inbox.png', // Replace this with your image asset path
+          width: 400, // Adjust width as needed
+          height: 200, // Adjust height as needed
+            fit: BoxFit.contain, // Adjust the fit as needed
         ),
-        // Add your inbox content here
+        // Add your additional inbox content here
       ],
     );
   }
+
 
   Tab _buildTab(String text) {
     return Tab(

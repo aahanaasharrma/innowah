@@ -18,8 +18,6 @@ class _CarRouteState extends State<CarRoute> {
   late GoogleMapController _mapController;
   final Set<Marker> _markers = {};
   location.LocationData? _currentLocation;
-  TextEditingController _fromController = TextEditingController();
-  TextEditingController _toController = TextEditingController();
   late Polyline _routePolyline;
 
   @override
@@ -57,25 +55,6 @@ class _CarRouteState extends State<CarRoute> {
 
   void _addMarker(LatLng position) async {
     _markers.clear();
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-
-    if (placemarks.isNotEmpty) {
-      Placemark placemark = placemarks[0];
-      String street = placemark.street ?? '';
-      String locality = placemark.locality ?? '';
-      String administrativeArea = placemark.administrativeArea ?? '';
-      String postalCode = placemark.postalCode ?? '';
-      String country = placemark.country ?? '';
-      String formattedAddress =
-          '$street, $locality, $administrativeArea $postalCode, $country';
-      setState(() {
-        _fromController.text = formattedAddress;
-      });
-    }
-
     _markers.add(
       Marker(
         markerId: MarkerId("currentLocation"),
@@ -95,11 +74,41 @@ class _CarRouteState extends State<CarRoute> {
       final data = json.decode(response.body);
       final routes = data['routes'];
       if (routes != null && routes.isNotEmpty) {
-        final points = routes[0]['overview_polyline']['points'];
+        final points = _decodePolyline(routes[0]['overview_polyline']['points']);
         print("Polyline points: $points"); // Print polyline data for debugging
-        _addPolylineToMap(decodePolyline(points));
+        _addPolylineToMap(points);
       }
     }
+  }
+
+  List<LatLng> _decodePolyline(String encoded) {
+    List<LatLng> points = [];
+    int index = 0, len = encoded.length;
+    int lat = 0, lng = 0;
+
+    while (index < len) {
+      int b, shift = 0, result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lng += dlng;
+
+      points.add(LatLng(lat / 1e5, lng / 1e5));
+    }
+    return points;
   }
 
   void _addPolylineToMap(List<LatLng> polylinePoints) {
@@ -127,100 +136,22 @@ class _CarRouteState extends State<CarRoute> {
       ),
       body: _currentLocation == null
           ? Center(child: CircularProgressIndicator())
-          : Column(
-        children: [
-          Expanded(
-            child: GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  _currentLocation!.latitude!,
-                  _currentLocation!.longitude!,
-                ),
-                zoom: 15,
-              ),
-              markers: _markers,
-              polylines: {
-                _routePolyline,
-              },
-              myLocationEnabled: true,
-              zoomControlsEnabled: false,
-            ),
+          : GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+            _currentLocation!.latitude!,
+            _currentLocation!.longitude!,
           ),
-          Container(
-            padding: EdgeInsets.all(16),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Schedule Ride',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'From',
-                  ),
-                  readOnly: true,
-                  controller: _fromController,
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'To',
-                  ),
-                  readOnly: true,
-                  controller: _toController,
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement your logic to schedule the ride
-                  },
-                  child: Text('Schedule'),
-                ),
-              ],
-            ),
-          ),
-        ],
+          zoom: 15,
+        ),
+        markers: _markers,
+        polylines: {
+          _routePolyline,
+        },
+        myLocationEnabled: true,
+        zoomControlsEnabled: false,
       ),
     );
-  }
-
-  List<LatLng> decodePolyline(String polyline) {
-    var list = <LatLng>[];
-    var index = 0;
-    var lat = 0;
-    var lng = 0;
-
-    while (index < polyline.length) {
-      var b;
-      var shift = 0;
-      var result = 0;
-
-      do {
-        b = polyline.codeUnitAt(index++) - 63;
-        result |= (b & 0x1F) << (shift += 5);
-      } while (b >= 0x20);
-      var dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-      lat += dlat;
-
-      shift = 0;
-      result = 0;
-      do {
-        b = polyline.codeUnitAt(index++) - 63;
-        result |= (b & 0x1F) << (shift += 5);
-      } while (b >= 0x20);
-      var dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-      lng += dlng;
-
-      var p = LatLng((lat / 1E5).toDouble(), (lng / 1E5).toDouble());
-      list.add(p);
-    }
-    return list;
   }
 }

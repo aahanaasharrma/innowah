@@ -1,265 +1,140 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart' as location;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class RentalsPage extends StatelessWidget {
+class RentalsPage extends StatefulWidget {
+  @override
+  _RentalsPageState createState() => _RentalsPageState();
+}
+
+class _RentalsPageState extends State<RentalsPage> {
+  List<dynamic> _rentalShops = [];
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRentalShops();
+  }
+
+  Future<void> _fetchRentalShops() async {
+    try {
+      location.Location loc = location.Location();
+      location.LocationData locationData = await loc.getLocation();
+      final apiKey = 'AIzaSyDP1HbV7FDh1RkCowbOLsnA9Al0lgmFWpQ';
+      final latitude = locationData.latitude;
+      final longitude = locationData.longitude;
+      final radius = 5000; // 5000 meters (5 km) radius
+      final types = 'car_rental|bicycle_store'; // Add more types as needed
+      final url =
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&types=$types&key=$apiKey';
+
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          _rentalShops = data['results'];
+        });
+      } else {
+        throw Exception('Failed to fetch rental shops');
+      }
+    } catch (e) {
+      print('Error fetching rental shops: $e');
+    }
+  }
+
+  List<dynamic> _searchRentalShops(String query) {
+    return _rentalShops.where((shop) {
+      final name = shop['name'].toString().toLowerCase();
+      return name.contains(query.toLowerCase());
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu), // Assuming you have a menu button here.
-        title: Text('Rentals'),
-        actions: <Widget>[
-          CircleAvatar(
-            // Replace with your user's profile image asset
-            backgroundImage: AssetImage('assets/images/profile.png'),
+        backgroundColor: Color(0xFFD1E2C9),
+        title: Text('Nearby Rentals', style: TextStyle(color: Colors.black)),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {});
+              },
+            ),
           ),
-          SizedBox(width: 10), // For padding
+          Expanded(
+            child: _searchController.text.isEmpty
+                ? _buildRentalList(_rentalShops)
+                : _buildRentalList(_searchRentalShops(_searchController.text)),
+          ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Find a Cycle or an Electric Scooter near you',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
-              child: Text(
-                'Have a very pleasant experience',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Find cycle, etc',
-                  filled: true,
-                  fillColor: Colors.white,
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  _categoryButton(label: 'Cycles'),
-                  _categoryButton(label: 'Electric Vehicles'),
-                  _categoryButton(label: 'Routes'),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: RentalItem(
-                      key: ValueKey('Sai Cycle Rental'), // Unique key based on the title
-                      title: 'Sai Cycle Rental',
-                      distance: '12m away',
-                      price: 'Rs. 25 per hour',
-                      imageUrl: 'assets/images/cycle1.png',
-                      boxColor: Color(0xFFB0C7A6), // Sage green color
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: RentalItem(
-                      key: ValueKey('Raja Rentals'), // Unique key based on the title
-                      title: 'Raja Rentals',
-                      distance: '10m away',
-                      price: 'Rs. 35 per hour',
-                      imageUrl: 'assets/images/cycle2.png',
-                      boxColor: Color(0xFFB0C7A6), // Sage green color
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Accessories',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: AccessoryItem(
-                title: 'Black and white helmet MT',
-                subtitle: 'Scooter, bike',
-                price: 'Rs. 856',
-                imageUrl: 'assets/images/helmet.png', // Replace with your asset
-                boxColor: Color(0xFFB0C7A6), // Sage green color
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
-  Widget _categoryButton({required String label}) {
-    return ElevatedButton(
-      onPressed: () {
-        // Handle your category change
+  Widget _buildRentalList(List<dynamic> rentals) {
+    return rentals.isEmpty
+        ? Center(child: CircularProgressIndicator())
+        : ListView.builder(
+      itemCount: rentals.length,
+      itemBuilder: (context, index) {
+        final shop = rentals[index];
+        final name = shop['name'];
+        final placeId = shop['place_id'];
+        return FutureBuilder(
+          future: _getPhotoUrl(placeId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return ListTile(
+                title: Text(name),
+                subtitle: Text('Loading...'),
+              );
+            } else if (snapshot.hasError) {
+              return ListTile(
+                title: Text(name),
+                subtitle: Text('Error loading photo'),
+              );
+            } else {
+              final photoUrl = snapshot.data as String?;
+              return ListTile(
+                title: Text(name),
+                subtitle: photoUrl != null ? Image.network(photoUrl) : Text('No photo available'),
+              );
+            }
+          },
+        );
       },
-      child: Text(label),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white, backgroundColor: Color(0xFFB0C7A6), // Sage green color
-      ),
     );
   }
-}
 
-class RentalItem extends StatelessWidget {
-  final String title;
-  final String distance;
-  final String price;
-  final String imageUrl;
-  final Color boxColor;
-
-  const RentalItem({
-    Key? key,
-    required this.title,
-    required this.distance,
-    required this.price,
-    required this.imageUrl,
-    required this.boxColor,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      color: boxColor, // Set the color of the box
-      child: SizedBox(
-        width: 200, // Set a fixed width for each item
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              imageUrl,
-              height: 150, // Set a fixed height for the image
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4),
-                  Text(distance),
-                  SizedBox(height: 4),
-                  Text(price),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AccessoryItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String price;
-  final String imageUrl;
-  final Color boxColor;
-
-  const AccessoryItem({
-    Key? key, // Key should be optional
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.imageUrl,
-    required this.boxColor,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      color: boxColor, // Set the color of the box
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Image.asset(
-              imageUrl,
-              width: 100, // Set a fixed width for the image
-              height: 60, // Set a fixed height for the image
-              fit: BoxFit.cover,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      price,
-                      style: TextStyle(
-                        color: Color(0xFFB0C7A6), // Sage green color
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Add your onPressed handler here
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Color(0xFFB0C7A6), // Sage green color
-              ),
-              child: Text('Buy now'),
-            ),
-          ],
-        ),
-      ),
-    );
+  Future<String?> _getPhotoUrl(String placeId) async {
+    try {
+      final apiKey = 'AIzaSyDP1HbV7FDh1RkCowbOLsnA9Al0lgmFWpQ';
+      final url =
+          'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=photo&key=$apiKey';
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final photoRef = data['result']['photos'][0]['photo_reference'];
+        return 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=$photoRef&key=$apiKey';
+      } else {
+        throw Exception('Failed to fetch photo for place: $placeId');
+      }
+    } catch (e) {
+      print('Error fetching photo: $e');
+      return null;
+    }
   }
 }

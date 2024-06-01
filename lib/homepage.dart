@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:innowah/aboutus.dart';
 import 'package:innowah/carbonpage.dart';
+import 'package:innowah/carpool.dart';
 import 'package:innowah/cycle_route.dart';
 import 'package:innowah/eventspage.dart';
 import 'package:innowah/local.dart';
@@ -9,6 +10,8 @@ import 'package:innowah/profilepage.dart';
 import 'package:innowah/rentals_page.dart';
 import 'package:innowah/rewards_page.dart'; // Ensure this is created
 import 'package:innowah/signup.dart';
+import 'package:innowah/step.dart';
+import 'package:innowah/train.dart';
 
 import 'car_route.dart';
 
@@ -26,9 +29,12 @@ class _HomePageState extends State<HomePage> {
     });
 
     if (index == 1) { // Assumes "Rewards" is at index 1
-      Navigator.push(context, MaterialPageRoute(builder: (context) => RewardsPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => RewardScreen()));
     } else if (index == 3) { // Assumes "Profile" is at index 3
       Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+    }
+    else if (index == 2) { // Assumes "Profile" is at index 3
+      Navigator.push(context, MaterialPageRoute(builder: (context) => StepCounter()));
     }
     // Add navigation for other indices if needed
   }
@@ -111,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                       title: 'Carpooling',
                       icon: 'carpool.png',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CarRoute(destination: '',)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CarpoolScreen()));
                       },
                     ),
                     SizedBox(width: 40),
@@ -132,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                       title: 'Train Schedule',
                       icon: 'train.png',
                       onPressed: () {
-                        // Implement navigation or functionality
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => TrainSearchScreen()));
                       },
                     ),
                     SizedBox(width: 40),
@@ -151,35 +157,35 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage('assets/images/home.jpg')),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage('assets/images/rewards.jpg')),
-            label: 'Rewards',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage('assets/images/chatbot.jpg')),
-            label: 'Chatbot',
-          ),
-          BottomNavigationBarItem(
-            icon: ImageIcon(AssetImage('assets/images/profile.jpg')),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
-    );
+    items: const <BottomNavigationBarItem>[
+    BottomNavigationBarItem(
+    icon: ImageIcon(AssetImage('assets/images/home.jpg')),
+    label: 'Home',
+    ),
+    BottomNavigationBarItem(
+    icon: ImageIcon(AssetImage('assets/images/rewards.jpg')),
+    label: 'Rewards',
+    ),
+    BottomNavigationBarItem(
+    icon: ImageIcon(AssetImage('assets/images/chatbot.jpg')),
+    label: 'Steps',
+    ),
+    BottomNavigationBarItem(
+    icon: ImageIcon(AssetImage('assets/images/profile.jpg')),
+    label: 'Profile',
+    ),
+    ],
+    currentIndex: _selectedIndex,
+    onTap: _onItemTapped,
+    type: BottomNavigationBarType.fixed, // Ensure all icons are shown without shifting
+    selectedItemColor: Colors.grey, // Set transparent color to avoid highlighting
+    unselectedItemColor: Colors.grey, // Set transparent color to avoid highlighting
+    showSelectedLabels: true, // Hide labels
+    showUnselectedLabels: true, // Hide labels
+      ),);
   }
 }
 
-// Include your existing SliderWidget, BackgroundImage, MainSquareButton, and SideMenu class definitions below this line.
-
-// Include your existing SliderWidget, BackgroundImage, MainSquareButton, and SideMenu class definitions below this line.
 
 class SliderWidget extends StatelessWidget {
   @override

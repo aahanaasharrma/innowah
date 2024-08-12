@@ -65,7 +65,7 @@ class _CarRouteState extends State<CarRoute> {
   }
 
   void _plotRoute(double fromLat, double fromLng, double toLat, double toLng) async {
-    final apiKey = 'AIzaSyDP1HbV7FDh1RkCowbOLsnA9Al0lgmFWpQ';
+    final apiKey = 'GOOGLE MAPS API KEY';
     final url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=$fromLat,$fromLng&destination=$toLat,$toLng&key=$apiKey';
 

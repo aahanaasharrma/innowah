@@ -22,7 +22,7 @@ class _RentalsPageState extends State<RentalsPage> {
     try {
       location.Location loc = location.Location();
       location.LocationData locationData = await loc.getLocation();
-      final apiKey = 'AIzaSyDP1HbV7FDh1RkCowbOLsnA9Al0lgmFWpQ';
+      final apiKey = 'GOOGLE MAPS API';
       final latitude = locationData.latitude;
       final longitude = locationData.longitude;
       final radius = 5000; // 5000 meters (5 km) radius

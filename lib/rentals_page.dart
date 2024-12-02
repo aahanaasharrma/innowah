@@ -121,7 +121,7 @@ class _RentalsPageState extends State<RentalsPage> {
 
   Future<String?> _getPhotoUrl(String placeId) async {
     try {
-      final apiKey = 'AIzaSyDP1HbV7FDh1RkCowbOLsnA9Al0lgmFWpQ';
+      final apiKey = 'GOOGLE MAPS API';
       final url =
           'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=photo&key=$apiKey';
       final response = await http.get(Uri.parse(url));

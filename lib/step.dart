@@ -25,7 +25,7 @@ class _StepCounterState extends State<StepCounter> {
   @override
   void initState() {
     super.initState();
-    _loadSteps(); // Load the stored steps count
+    _loadSteps(); 
     _streamSubscription =
         SensorsPlatform.instance.accelerometerEvents.listen((event) {
           setState(() {
@@ -35,7 +35,7 @@ class _StepCounterState extends State<StepCounter> {
             exactDistance = _calculateMagnitude(x, y, z);
             if (exactDistance > 6) {
               steps++;
-              _saveSteps(steps); // Save the updated steps count
+              _saveSteps(steps); 
             }
           });
         });
@@ -68,7 +68,7 @@ class _StepCounterState extends State<StepCounter> {
               ),
             ),
           ),
-          SizedBox(height: 20), // Add space below the Step Tracker title
+          SizedBox(height: 20), 
           Expanded(
             child: Container(
               color: Colors.white,
@@ -85,12 +85,12 @@ class _StepCounterState extends State<StepCounter> {
                           'Today',
                           style: TextStyle(
                             color: Color(0xFF4C6144),
-                            fontSize: 24, // Adjusted font size
+                            fontSize: 24, 
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      SizedBox(height: 12), // Add space below Today text
+                      SizedBox(height: 12), 
                       _buildInfoBox(
                           'Steps', steps.toString(), 'assets/images/step.png', Color(0xFFE5F4DE)),
                     ],
@@ -99,12 +99,12 @@ class _StepCounterState extends State<StepCounter> {
                       'Total Distance', _calculateDistance(), 'assets/images/distance.png', Color(0xFFE5F4DE)),
                   _buildInfoBox(
                       'Calories Burnt', _calculateCalories(), 'assets/images/calorie.png', Color(0xFFE5F4DE)),
-                  SizedBox(height: 0), // Add space between boxes and the image
+                  SizedBox(height: 0), 
                   Center(
                     child: Image.asset(
-                      'assets/images/step_logo.png', // Adjust path to your image
-                      width: 350, // Set the width as desired
-                      height: 200, // Set the height as desired
+                      'assets/images/step_logo.png', 
+                      width: 350, 
+                      height: 200, 
                     ),
                   ),
                 ],
@@ -117,15 +117,15 @@ class _StepCounterState extends State<StepCounter> {
   }
 
   String _calculateDistance() {
-    // Assuming a constant distance per step
-    final double distancePerStep = 0.0008; // Modify this value as needed
-    return (steps * distancePerStep).toStringAsFixed(3); // Fixed to 2 decimal places
+     
+    final double distancePerStep = 0.0008;  
+    return (steps * distancePerStep).toStringAsFixed(3);  
   }
 
   String _calculateCalories() {
-    // Assuming a constant calories burned per step
-    final double caloriesPerStep = 0.04; // Modify this value as needed
-    return (steps * caloriesPerStep).toStringAsFixed(2); // Fixed to 2 decimal places
+    
+    final double caloriesPerStep = 0.04;  
+    return (steps * caloriesPerStep).toStringAsFixed(2);  
   }
 
   Widget _buildInfoBox(String title, String value, String iconPath, Color color) {
@@ -219,13 +219,13 @@ class _StepCounterState extends State<StepCounter> {
     });
   }
 
-  // Function to save the steps count locally
+ 
   Future<void> _saveSteps(int steps) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('steps', steps);
   }
 
-  // Function to load the steps count from local storage
+ 
   Future<void> _loadSteps() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {

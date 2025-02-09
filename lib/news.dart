@@ -25,7 +25,7 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Future<void> _fetchNews({String? query}) async {
-    final String apiKey = '3ac79dba0674406f80270019b2c3938d';
+    final String apiKey = api_key;
     String url = 'https://newsapi.org/v2/everything?q=environment%20sustainability&apiKey=$apiKey';
 
     if(query != null && query.isNotEmpty) {

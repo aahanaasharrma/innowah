@@ -87,7 +87,7 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
     });
 
     final headers = {
-      'X-RapidAPI-Key': '6eac665157mshe8ae90f1020c6d1p1ee884jsn4e1f0df85651',
+      'X-RapidAPI-Key': api_key_train,
       'X-RapidAPI-Host': 'irctc1.p.rapidapi.com',
     };
 
@@ -118,7 +118,7 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null, // No appbar
-      backgroundColor: Color(0xFFFFFFFF), // Light green for bottom half
+      backgroundColor: Color(0xFFFFFFFF),  
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -132,8 +132,8 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFFB0C7A6), // Light green
-                  Color(0xFF3A4F3B), // Dark green
+                  Color(0xFFB0C7A6),  
+                  Color(0xFF3A4F3B),  
                 ],
               ),
             ),
@@ -166,12 +166,12 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
                       borderRadius: BorderRadius.circular(40),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.6), // Shadow color with opacity
-                          spreadRadius: 5, // Spread radius
-                          blurRadius: 7, // Blur radius
-                          offset: Offset(1, 3), // Offset in x and y direction
+                          color: Colors.black.withOpacity(0.6),  
+                          spreadRadius: 5,  
+                          blurRadius: 7,  
+                          offset: Offset(1, 3),  
                         ),
-                      ], // Rounded corners
+                      ], 
                     ),
                     padding: EdgeInsets.all(16),
                     child: Column(
@@ -185,7 +185,7 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
                             hintText: 'Enter From Station',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide.none, // Remove border side
+                              borderSide: BorderSide.none,  
                             ),
                           ),
                         ),
@@ -205,11 +205,11 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
                           controller: _toController,
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.grey[200], // Light grey fill
+                            fillColor: Colors.grey[200],   
                             hintText: 'Enter To Station',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide.none, // Remove border side
+                              borderSide: BorderSide.none,  
                             ),
                           ),
                         ),
@@ -268,7 +268,7 @@ class _TrainSearchScreenState extends State<TrainSearchScreen> {
           ),
           Expanded(
             child: Container(
-                color: Colors.white, // White color for bottom half
+                color: Colors.white, 
                 padding: EdgeInsets.all(16),
                 child: _isLoading
                     ? CircularProgressIndicator()

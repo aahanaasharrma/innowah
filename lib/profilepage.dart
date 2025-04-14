@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'homepage.dart';
+
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFB0C7A6), // Sage green color
+        backgroundColor: Color(0xFFB0C7A6),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back button press
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
           },
+
         ),
         title: Text('Profile'),
         actions: <Widget>[
@@ -60,7 +63,7 @@ class ProfilePage extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Sarah W.',
+            'Devangana',
             style: TextStyle(color: Colors.white, fontSize: 24),
           ),
           Text(

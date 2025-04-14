@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "353909507433",
+    "project_id": "greengo-c588c",
+    "storage_bucket": "greengo-c588c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353909507433:android:0b0e2ac68463257476e9f8",
+        "android_client_info": {
+          "package_name": "com.example.innowah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBO9gBSJm8LZQId1xh_eURVJ5aSPq5HrPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

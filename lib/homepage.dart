@@ -3,7 +3,9 @@ import 'package:innowah/aboutus.dart';
 import 'package:innowah/carbonpage.dart';
 import 'package:innowah/carpool.dart';
 import 'package:innowah/cycle_route.dart';
+import 'package:innowah/daily_log.dart';
 import 'package:innowah/eventspage.dart';
+import 'package:innowah/leaderboard.dart';
 import 'package:innowah/local.dart';
 import 'package:innowah/news.dart';
 import 'package:innowah/profilepage.dart';
@@ -11,9 +13,10 @@ import 'package:innowah/rentals_page.dart';
 import 'package:innowah/rewards_page.dart'; // Ensure this is created
 import 'package:innowah/signup.dart';
 import 'package:innowah/step.dart';
-import 'package:innowah/train.dart';
+
 
 import 'car_route.dart';
+import 'train.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -308,7 +311,7 @@ class SideMenu extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Color(0xFFB0C7A6), // Sage green color
+              color: Color(0xFFB0C7A6),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,7 +322,7 @@ class SideMenu extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'John Doe',
+                  'Devangana',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -327,6 +330,14 @@ class SideMenu extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          ListTile(
+            title: Text('Daily Log'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => JournalPage()));
+            },
           ),
           ListTile(
             title: Text('About Us'),
@@ -366,6 +377,14 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LocalBusinessPage()));
+            },
+          ),
+          ListTile(
+            title: Text('LeaderBoard'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LeaderboardScreen()));
             },
           ),
         ],

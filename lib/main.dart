@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:innowah/aboutus.dart';
-import 'package:innowah/car_route.dart';
-import 'package:innowah/carbonpage.dart';
-import 'package:innowah/carpool.dart';
-import 'package:innowah/document.dart';
-import 'package:innowah/eventspage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:innowah/daily_log.dart';
 import 'package:innowah/getstarted.dart';
-import 'package:innowah/profilepage.dart';
-import 'package:innowah/rentals_page.dart';
-import 'package:innowah/rewards_page.dart';
-import 'package:innowah/schedule_ride.dart';
-import 'homepage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+import 'carbon_calendar.dart';
+import 'leaderboard.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load the .env file first
+  try {
+    await dotenv.load(fileName: ".env");  // Specify the file name to avoid errors
+  } catch (e) {
+    debugPrint("Error loading .env file: $e");
+  }
+  print(dotenv.env['GOOGLE_MAPS_API_KEY']);
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
@@ -21,11 +29,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Google Maps Demo',
+      title: 'Innowah',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: GetStarted(),
+      home: GetStarted(), // Make sure GetStarted() is properly implemented
+
     );
   }
 }

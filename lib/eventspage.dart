@@ -18,7 +18,7 @@ class EventsPage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                'Welcome Sarah',
+                'Welcome Devangana',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

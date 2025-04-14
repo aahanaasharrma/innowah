@@ -15,8 +15,8 @@ class LocalBusinessPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(20.0, 70.0, 20.0, 20.0), // Added padding to bring down "Local Business"
-                color: Color(0xFFB0C7A6), // Green background color
+                padding: EdgeInsets.fromLTRB(20.0, 70.0, 20.0, 20.0),
+                color: Color(0xFFB0C7A6),
                 child: Center(
                   child: Text(
                     '      Local \n Businesses',
@@ -27,7 +27,7 @@ class LocalBusinessPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 30.0), // Space between "Local Business" and "Our Partners"
+              SizedBox(height: 30.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
@@ -38,29 +38,29 @@ class LocalBusinessPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10.0), // Space between "Our Partners" text and images
+              SizedBox(height: 10.0),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
                     PartnerList(),
-                    SizedBox(height: 10.0), // Space between "Our Partners" and the clickable text
+                    SizedBox(height: 10.0),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => DocumentVerificationPage()),
                         );
-                        // Handle click action here
+
                       },
                       child: Text(
                         'Are you a local business? Apply here',
                         style: TextStyle(
                           fontSize: 16.0,
                           decoration: TextDecoration.underline,
-                          color: Colors.black, // Set the text color to black
+                          color: Colors.black,
                         ),
-                        textAlign: TextAlign.center, // Center align the text
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],
@@ -145,7 +145,7 @@ class PartnerRow extends StatelessWidget {
       children: [
         Expanded(
           child: Material(
-            elevation: 2, // Set elevation for the shadow
+            elevation: 2,
             borderRadius: BorderRadius.circular(10.0),
             child: Container(
               margin: EdgeInsets.only(right: 10.0, bottom: 10.0),
@@ -163,7 +163,7 @@ class PartnerRow extends StatelessWidget {
         ),
         Expanded(
           child: Material(
-            elevation: 2, // Set elevation for the shadow
+            elevation: 2,
             borderRadius: BorderRadius.circular(10.0),
             child: Container(
               margin: EdgeInsets.only(left: 10.0, bottom: 10.0),

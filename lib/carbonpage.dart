@@ -18,7 +18,7 @@ class CarbonPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF3A4F3B), // Set dark green color
+                    color: Color(0xFF3A4F3B),
                   ),
                 ),
               ),
@@ -26,18 +26,17 @@ class CarbonPage extends StatelessWidget {
 
             SizedBox(height: 0.0),
 
-            // Placeholder for Logo (Replace with your logo widget)
+
             Image.asset(
               'assets/images/carbon.png',
-              height: 300, // Set height
-              width: 350, // Set width
-              fit: BoxFit.contain, // Adjust the fit according to your needs
+              height: 300,
+              width: 350,
+              fit: BoxFit.contain,
             ),
 
 
             SizedBox(height: 20.0),
 
-            // Text: Description
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
@@ -52,7 +51,7 @@ class CarbonPage extends StatelessWidget {
           ],
         ),
       ),
-      backgroundColor: Colors.white, // Set background color of the bottom portion to white
+      backgroundColor: Colors.white,
     );
   }
 }

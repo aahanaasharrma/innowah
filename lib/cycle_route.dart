@@ -9,7 +9,7 @@ class CycleRoute extends StatelessWidget {
         children: [
           // Background Image
           Image.asset(
-            'assets/images/cycleroute.jpg', // Path to your background image asset
+            'assets/images/cycleroute.jpg',
             fit: BoxFit.cover,
           ),
         ],

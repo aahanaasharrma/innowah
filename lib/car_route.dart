@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:geocoding/geocoding.dart';
@@ -65,7 +66,7 @@ class _CarRouteState extends State<CarRoute> {
   }
 
   void _plotRoute(double fromLat, double fromLng, double toLat, double toLng) async {
-    final apiKey = 'AIzaSyDP1HbV7FDh1RkCowbOLsnA9Al0lgmFWpQ';
+    final apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
     final url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=$fromLat,$fromLng&destination=$toLat,$toLng&key=$apiKey';
 
@@ -75,7 +76,7 @@ class _CarRouteState extends State<CarRoute> {
       final routes = data['routes'];
       if (routes != null && routes.isNotEmpty) {
         final points = _decodePolyline(routes[0]['overview_polyline']['points']);
-        print("Polyline points: $points"); // Print polyline data for debugging
+        print("Polyline points: $points");
         _addPolylineToMap(points);
       }
     }

@@ -90,6 +90,7 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
                   ),
                   SizedBox(height: 16),
                   TextField(
+
                     decoration: InputDecoration(
                       labelText: 'Leaving From',
                     ),

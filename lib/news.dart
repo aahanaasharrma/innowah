@@ -2,12 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-
-void main() {
-  runApp(MaterialApp(
-    home: NewsPage(),
-  ));
-}
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -25,10 +20,10 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Future<void> _fetchNews({String? query}) async {
-    final String apiKey = '3ac79dba0674406f80270019b2c3938d';
+    final String apiKey = dotenv.env['NEWS_API_KEY'] ?? '';
     String url = 'https://newsapi.org/v2/everything?q=environment%20sustainability&apiKey=$apiKey';
 
-    if(query != null && query.isNotEmpty) {
+    if (query != null && query.isNotEmpty) {
       url = 'https://newsapi.org/v2/everything?q=$query&apiKey=$apiKey';
     }
 
@@ -65,7 +60,7 @@ class _NewsPageState extends State<NewsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: 50), // Added space to move "Eco News" title below
+            SizedBox(height: 50),
             Text(
               'Eco News',
               style: TextStyle(color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
@@ -74,17 +69,17 @@ class _NewsPageState extends State<NewsPage> {
             SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20), // Rounded corners
-                border: Border.all(color: Colors.grey), // Border color
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.grey),
               ),
               child: TextField(
                 controller: _searchController,
                 onChanged: _onSearchTextChanged,
                 decoration: InputDecoration(
                   hintText: 'Search News',
-                  border: InputBorder.none, // Remove input border
+                  border: InputBorder.none,
                   prefixIcon: Icon(Icons.search),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14), // Adjust padding
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
               ),
             ),
@@ -96,13 +91,14 @@ class _NewsPageState extends State<NewsPage> {
                   final article = _articles[index];
                   return GestureDetector(
                     onTap: () async {
-                      // Open the article URL in a web browser or a WebView
-                      if (await canLaunch(article.url)) {
-                        await launch(article.url);
+                      Uri url = Uri.parse(article.url);
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url, mode: LaunchMode.externalApplication);
                       } else {
                         throw 'Could not launch ${article.url}';
                       }
                     },
+
                     child: Card(
                       elevation: 2,
                       margin: EdgeInsets.only(bottom: 16),

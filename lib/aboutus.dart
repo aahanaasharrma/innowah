@@ -9,7 +9,7 @@ class AboutUsPage extends StatelessWidget {
         children: [
           // Background Image
           Image.asset(
-            'assets/images/AboutUs.png', // Path to your background image asset
+            'assets/images/AboutUs.png',
             fit: BoxFit.cover,
           ),
         ],

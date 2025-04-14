@@ -9,7 +9,7 @@ class CarpoolScreen extends StatefulWidget {
 class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int pricePerSeat = 10;
-  int no = 1; // Initial price per seat
+  int no = 1;
 
   @override
   void initState() {
@@ -24,7 +24,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            color: Color(0xFFAEC6A5), // Set background color to light green
+            color: Color(0xFFAEC6A5),
             padding: EdgeInsets.symmetric(vertical: 50.0),
             child: Center(
               child: Text(
@@ -32,7 +32,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF3A4F3B), // Set dark green color
+                  color: Color(0xFF3A4F3B),
                 ),
               ),
             ),
@@ -53,7 +53,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
               controller: _tabController,
               children: [
                 _buildSearchContent(),
-                _buildPublishContent(), // New method for "Publish Content" tab
+                _buildPublishContent(),
                 _buildInboxContent(),
               ],
             ),
@@ -67,7 +67,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Add your search content here
+
         Expanded(
           child: ScheduleRidePage(),
         ),
@@ -89,11 +89,11 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20.0), // Removed excessive spacing here
+          SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(width: 20), // Increased spacing here
+              SizedBox(width: 20),
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -110,7 +110,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                   color: Colors.white,
                 ),
               ),
-              SizedBox(width: 40), // Increased spacing here
+              SizedBox(width: 40),
               Text(
                 'Rs $pricePerSeat',
                 style: TextStyle(
@@ -118,7 +118,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 40), // Increased spacing here
+              SizedBox(width: 40),
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -135,13 +135,13 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                   color: Colors.white,
                 ),
               ),
-              SizedBox(width: 30), // Increased spacing here
+              SizedBox(width: 30),
             ],
           ),
-          SizedBox(height: 20.0), // Removed excessive spacing here
+          SizedBox(height: 20.0),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0), // Oval shape
+              borderRadius: BorderRadius.circular(20.0),
               color:  Color(0xFFB0C7A6),
             ),
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -162,11 +162,11 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 20.0), // Removed excessive spacing here
+          SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(width: 20), // Increased spacing here
+              SizedBox(width: 20),
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -183,7 +183,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                   color: Colors.white,
                 ),
               ),
-              SizedBox(width: 40), // Increased spacing here
+              SizedBox(width: 40),
               Text(
                 ' $no',
                 style: TextStyle(
@@ -191,7 +191,7 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 40), // Increased spacing here
+              SizedBox(width: 40),
               Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -208,11 +208,11 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
                   color: Colors.white,
                 ),
               ),
-              SizedBox(width: 30), // Increased spacing here
+              SizedBox(width: 30),
             ],
           ),
 
-          Image.asset( // Image added here
+          Image.asset(
             'assets/images/carpool.png',
             width:400,
             height: 300,
@@ -227,14 +227,14 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
 
-        SizedBox(height: 20), // Add some space between text and image
+        SizedBox(height: 20),
         Image.asset(
-          'assets/images/inbox.png', // Replace this with your image asset path
-          width: 400, // Adjust width as needed
-          height: 200, // Adjust height as needed
-            fit: BoxFit.contain, // Adjust the fit as needed
+          'assets/images/inbox.png',
+          width: 400,
+          height: 200,
+            fit: BoxFit.contain,
         ),
-        // Add your additional inbox content here
+
       ],
     );
   }
@@ -246,8 +246,8 @@ class _CarpoolScreenState extends State<CarpoolScreen> with SingleTickerProvider
         width: 80,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.grey[300], // Grey background color for tabs
-          borderRadius: BorderRadius.circular(20.0), // Oval shape
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Center(
           child: Text(text),

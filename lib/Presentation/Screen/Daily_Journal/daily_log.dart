@@ -1,14 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'firebase_service.dart';
 import 'carbon_calendar.dart';
+import '../../../Services/firebase_service.dart';
+
+import 'daily_log.dart';
 
 
 class JournalPage extends StatefulWidget {
   @override
   _JournalPageState createState() => _JournalPageState();
 }
-
 class _JournalPageState extends State<JournalPage> {
   final FirebaseService _firebaseService = FirebaseService();
   double _carbonFootprint = 0.0;
@@ -42,12 +42,21 @@ class _JournalPageState extends State<JournalPage> {
     double totalFootprint = 0.0;
 
     for (var activity in activities) {
-      totalFootprint += activity.carbonEmission;
+      if (isToday(activity.date)) {
+        totalFootprint += activity.carbonEmission;
+      }
     }
 
     setState(() {
       _carbonFootprint = totalFootprint;
     });
+  }
+
+  bool isToday(DateTime date) {
+    final today = DateTime.now();
+    return date.year == today.year &&
+        date.month == today.month &&
+        date.day == today.day;
   }
 
   void _logActivity() async {
@@ -63,7 +72,7 @@ class _JournalPageState extends State<JournalPage> {
     Activity newActivity = Activity(
       name: _selectedActivity!,
       carbonEmission: carbonEmission,
-      date: DateTime.now(),
+      date: DateTime.now(), id: '',
     );
 
     try {
@@ -77,6 +86,57 @@ class _JournalPageState extends State<JournalPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error logging activity: $e')),
+      );
+    }
+  }
+
+  // Add this calculateCarbon method to the _JournalPageState class
+  double calculateCarbon(String activityType, double value) {
+    switch (activityType) {
+      case 'Car Travel (km)':
+        return value * 0.1325;
+      case 'Bike Travel (km)':
+        return 0;
+      case 'Bus Travel (km)':
+        return value * 0.1099;
+      case 'Train Travel (km)':
+        return value * 0.0845;
+
+      case 'Plant-Based Meal':
+        return value * 0.8;
+      case 'Meat-Based Meal':
+        return value * 6;
+
+      case 'Electricity Usage (kWh)':
+        return value * 0.92;
+      case 'Coal (kWh)':
+        return value * 1.0478;
+      case 'Clothing Purchase':
+        return value * 6.0;
+      case 'Electronics Purchase':
+        return value * 50.0;
+
+      case 'Plastic Waste (kg)':
+        return value * 2.6;
+      case 'Recycled Materials (kg)':
+        return value * -1.0;
+
+      default:
+        return 0.0;
+    }
+  }
+
+  // Add a method to delete an activity from Firestore
+  void _deleteActivity(String activityId) async {
+    try {
+      await _firebaseService.deleteActivity(activityId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Activity deleted successfully')),
+      );
+      _fetchTotalCarbonFootprint(); // Refresh total footprint after deletion
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting activity: $e')),
       );
     }
   }
@@ -177,7 +237,10 @@ class _JournalPageState extends State<JournalPage> {
                 stream: _firebaseService.getActivities(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    final activities = snapshot.data!;
+                    final activities = snapshot.data!
+                        .where((activity) => isToday(activity.date)) // Only show today's activities
+                        .toList();
+
                     return ListView.builder(
                       itemCount: activities.length,
                       itemBuilder: (context, index) {
@@ -188,6 +251,10 @@ class _JournalPageState extends State<JournalPage> {
                             title: Text(activity.name),
                             subtitle: Text(
                               'CO2: ${activity.carbonEmission.toStringAsFixed(2)} kg | Date: ${activity.date.toLocal().toString().split(' ')[0]}',
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete, color: Color(0xFF9C9F7E)),
+                              onPressed: () => _deleteActivity(activity.id),
                             ),
                           ),
                         );
@@ -204,69 +271,6 @@ class _JournalPageState extends State<JournalPage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-
-double calculateCarbon(String activityType, double value) {
-  switch (activityType) {
-    case 'Car Travel (km)':
-      return value * 0.1325;
-    case 'Bike Travel (km)':
-      return 0;
-    case 'Bus Travel (km)':
-      return value * 0.1099;
-    case 'Train Travel (km)':
-      return value * 0.0845;
-
-    case 'Plant-Based Meal':
-      return value * 0.8;
-    case 'Meat-Based Meal':
-      return value * 6;
-
-    case 'Electricity Usage (kWh)':
-      return value * 0.92;
-    case 'Coal (kWh)':
-      return value * 1.0478;
-    case 'Clothing Purchase':
-      return value * 6.0;
-    case 'Electronics Purchase':
-      return value * 50.0;
-
-    case 'Plastic Waste (kg)':
-      return value * 2.6;
-    case 'Recycled Materials (kg)':
-      return value * -1.0;
-
-    default:
-      return 0.0;
-  }
-}
-
-
-class Activity {
-  String name;
-  double carbonEmission;
-  DateTime date;
-
-  Activity({required this.name, required this.carbonEmission, required this.date});
-
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'carbonEmission': carbonEmission,
-      'date': Timestamp.fromDate(date),
-    };
-  }
-
-
-  factory Activity.fromMap(Map<String, dynamic> map) {
-    return Activity(
-      name: map['name'] ?? '',
-      carbonEmission: (map['carbonEmission'] as num).toDouble(),
-      date: map['date'] is Timestamp ? (map['date'] as Timestamp).toDate() : DateTime.parse(map['date']),
     );
   }
 }

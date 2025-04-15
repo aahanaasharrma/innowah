@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:innowah/aboutus.dart';
-import 'package:innowah/carbonpage.dart';
-import 'package:innowah/carpool.dart';
-import 'package:innowah/cycle_route.dart';
-import 'package:innowah/daily_log.dart';
-import 'package:innowah/eventspage.dart';
-import 'package:innowah/leaderboard.dart';
-import 'package:innowah/local.dart';
-import 'package:innowah/news.dart';
-import 'package:innowah/profilepage.dart';
-import 'package:innowah/rentals_page.dart';
-import 'package:innowah/rewards_page.dart'; // Ensure this is created
-import 'package:innowah/signup.dart';
-import 'package:innowah/step.dart';
-
-
-import 'car_route.dart';
-import 'train.dart';
+import 'package:innowah/Presentation/Screen/HomePage/carpool/carpool.dart';
+import 'package:innowah/Presentation/Screen/HomePage/eventspage.dart';
+import 'package:innowah/Presentation/Screen/BottomNav/profilepage.dart';
+import 'package:innowah/Presentation/Screen/HomePage/rentals_page.dart';
+import 'package:innowah/Presentation/Screen/BottomNav/rewards_page.dart';
+import 'package:innowah/Presentation/Screen/BottomNav/step.dart';
+import 'Presentation/Screen/HomePage/train.dart';
+import 'Presentation/Widgets/bgimage.dart';
+import 'Presentation/Widgets/sidebar.dart';
+import 'Presentation/Widgets/slider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,15 +23,15 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
 
-    if (index == 1) { // Assumes "Rewards" is at index 1
+    if (index == 1) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => RewardScreen()));
-    } else if (index == 3) { // Assumes "Profile" is at index 3
+    } else if (index == 3) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
     }
-    else if (index == 2) { // Assumes "Profile" is at index 3
+    else if (index == 2) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => StepCounter()));
     }
-    // Add navigation for other indices if needed
+
   }
 
   @override
@@ -180,80 +172,16 @@ class _HomePageState extends State<HomePage> {
     ],
     currentIndex: _selectedIndex,
     onTap: _onItemTapped,
-    type: BottomNavigationBarType.fixed, // Ensure all icons are shown without shifting
-    selectedItemColor: Colors.grey, // Set transparent color to avoid highlighting
-    unselectedItemColor: Colors.grey, // Set transparent color to avoid highlighting
-    showSelectedLabels: true, // Hide labels
-    showUnselectedLabels: true, // Hide labels
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: Colors.grey,
+    unselectedItemColor: Colors.grey,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
       ),);
   }
 }
 
 
-class SliderWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Your Daily Eco Points',
-            style: TextStyle(
-              fontSize: 18,
-              color: Color(0xFFB0C7A6), // Sage green color
-            ),
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              Text(
-                '0', // Start of slider
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFFB0C7A6), // Sage green color
-                ),
-              ),
-              Expanded(
-                child: Slider(
-                  value: 62.5, // Halfway through the slider
-                  min: 0,
-                  max: 125, // End of slider
-                  onChanged: (value) {
-                    // Handle slider value change
-                  },
-                  activeColor: Color(0xFFB0C7A6), // Sage green color
-                ),
-              ),
-              Text(
-                '125', // End of slider
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFFB0C7A6), // Sage green color
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BackgroundImage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/bg_home.png'), // Updated path
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-}
 
 class MainSquareButton extends StatelessWidget {
   final String title;
@@ -297,97 +225,6 @@ class MainSquareButton extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class SideMenu extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color(0xFFB0C7A6),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage('assets/images/profile.jpg'),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Devangana',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            title: Text('Daily Log'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => JournalPage()));
-            },
-          ),
-          ListTile(
-            title: Text('About Us'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutUsPage()));
-            },
-          ),
-          ListTile(
-            title: Text('Carbon Footprint'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CarbonPage()));
-            },
-          ),
-          ListTile(
-            title: Text('Cycling Routes'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CycleRoute()));
-            },
-          ),
-          ListTile(
-            title: Text('EcoNews'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewsPage()));
-            },
-          ),
-          ListTile(
-            title: Text('Local Businesses'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LocalBusinessPage()));
-            },
-          ),
-          ListTile(
-            title: Text('LeaderBoard'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LeaderboardScreen()));
-            },
-          ),
-        ],
       ),
     );
   }

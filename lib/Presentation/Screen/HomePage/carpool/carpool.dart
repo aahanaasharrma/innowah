@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:innowah/schedule_ride.dart';
+import 'package:innowah/Presentation/Screen/HomePage/carpool/schedule_ride.dart';
 
 class CarpoolScreen extends StatefulWidget {
   @override

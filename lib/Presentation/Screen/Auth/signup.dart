@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:innowah/auth_service.dart';
-import 'package:innowah/login.dart';
+import 'package:innowah/Services/auth_service.dart';
+import 'package:innowah/Presentation/Screen/Auth/login.dart';
 
 class SignupPage extends StatefulWidget {
   @override

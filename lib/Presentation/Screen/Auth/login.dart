@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:innowah/auth_service.dart';
+import 'package:innowah/Services/auth_service.dart';
 import 'package:innowah/homepage.dart';
-import 'package:innowah/signup.dart';
-
-
+import 'package:innowah/Presentation/Screen/Auth/signup.dart';
 import 'forgotpassword.dart';
 
 class LoginPage extends StatefulWidget {

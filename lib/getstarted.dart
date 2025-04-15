@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:innowah/signup.dart';
+import 'package:innowah/Presentation/Screen/Auth/signup.dart';
 
 class GetStarted extends StatelessWidget {
   @override
@@ -20,7 +20,7 @@ class GetStarted extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 0), // Increased space above "Go Green" text
+                    SizedBox(height: 0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -41,7 +41,7 @@ class GetStarted extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10), // Increased space between "Go Green" and "Smart Living" tex
+                    SizedBox(height: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -54,7 +54,7 @@ class GetStarted extends StatelessWidget {
                             fontFamily: 'Sora',
                           ),
                         ),
-                        SizedBox(height: 5), // Increased space between "Smart Living" and "Sustainable Choices" text
+                        SizedBox(height: 5),
                         Text(
                           'Sustainable Choices',
                           style: TextStyle(
@@ -66,7 +66,7 @@ class GetStarted extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 70), // Increased space between "Sustainable Choices" and "Eco-Friendly Living" text
+                    SizedBox(height: 70),
                     Text(
                       'Eco-Friendly Living at Your Fingertips',
                       style: TextStyle(
@@ -75,7 +75,7 @@ class GetStarted extends StatelessWidget {
                         color: Color(0xFF514646),
                       ),
                     ),
-                    SizedBox(height: 15), // Increased space between "Eco-Friendly Living" text and the "Get Started" button
+                    SizedBox(height: 15),
                     ElevatedButton(
                       onPressed: () {
 
@@ -83,7 +83,7 @@ class GetStarted extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (context) => SignupPage()),
                         );
-                        // Action when Get Started button is pressed
+
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF3A4F3B),
@@ -117,8 +117,6 @@ class SliderWithDots extends StatefulWidget {
   @override
   _SliderWithDotsState createState() => _SliderWithDotsState();
 }
-
-
 
 class Indicator extends StatelessWidget {
   final int index;
@@ -180,7 +178,7 @@ class _SliderWithDotsState extends State<SliderWithDots> {
         Expanded(
           flex: 0,
           child: Align(
-            alignment: Alignment.bottomCenter, // Align the dots to the bottom
+            alignment: Alignment.bottomCenter,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
@@ -228,7 +226,7 @@ Widget buildSlide1() {
             color: Color(0xFF2F4B4E),
           ),
         ),
-        SizedBox(height: 5), // Adjust the spacing between the text and the next widget
+        SizedBox(height: 5),
         Text(
           'Your Eco-Conscious Choice for a Better  \n'
               '                            Tomorrow',
@@ -266,7 +264,7 @@ Widget buildSlide2() {
             color: Color(0xFF514646),
           ),
         ),
-        SizedBox(height: 5), // Adjust the spacing between the text and the next widget
+        SizedBox(height: 5),
         Text(
           'Rewards for eco-friendly choices with local  \n'
               '                            Businesses',
@@ -303,7 +301,7 @@ Widget buildSlide3() {
             color: Color(0xFF514646),
           ),
         ),
-        SizedBox(height: 5), // Adjust the spacing between the text and the next widget
+        SizedBox(height: 5),
         Text(
           'Latest news stories on Sustainability, Eco-Tech \n'
               '                          and Green Living',

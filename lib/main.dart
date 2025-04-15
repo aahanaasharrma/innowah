@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:innowah/daily_log.dart';
 import 'package:innowah/getstarted.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'carbon_calendar.dart';
-import 'leaderboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load the .env file first
+
   try {
-    await dotenv.load(fileName: ".env");  // Specify the file name to avoid errors
+    await dotenv.load(fileName: ".env");
   } catch (e) {
     debugPrint("Error loading .env file: $e");
   }
@@ -33,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: GetStarted(), // Make sure GetStarted() is properly implemented
+      home: GetStarted(),
 
     );
   }

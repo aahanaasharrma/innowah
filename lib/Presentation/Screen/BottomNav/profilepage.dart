@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'homepage.dart';
+import '../../../homepage.dart';
+import '../Auth/login.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class ProfilePage extends StatelessWidget {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              // Handle log out
+              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
             },
             child: Text('Log Out', style: TextStyle(color: Colors.white)),
           ),

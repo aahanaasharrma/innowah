@@ -91,7 +91,8 @@ class _NewsPageState extends State<NewsPage> {
                   final article = _articles[index];
                   return GestureDetector(
                     onTap: () async {
-                      Uri url = Uri.parse(article.url);
+                      final Uri url = Uri.parse(Uri.encodeFull(article.url));
+
                       if (await canLaunchUrl(url)) {
                         await launchUrl(url, mode: LaunchMode.externalApplication);
                       } else {

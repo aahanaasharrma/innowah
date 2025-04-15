@@ -54,9 +54,3 @@ class RewardScreen extends StatelessWidget {
     );
   }
 }
-
-void main() {
-  runApp(MaterialApp(
-    home: RewardScreen(),
-  ));
-}

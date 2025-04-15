@@ -10,7 +10,7 @@ class LeaderboardScreen extends StatelessWidget {
   ];
 
   final List<Color> medalColors = [
-    Color(0xFFFFD700), // Gold for 1st place
+    Color(0xFFFFD700),
     Color(0xFFC0C0C0), // Silver for 2nd place
     Color(0xFFCD7F32), // Bronze for 3rd place
   ];

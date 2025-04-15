@@ -9,7 +9,7 @@ class CarbonPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              color: Color(0xFFAEC6A5), // Set background color to light green
+              color: Color(0xFFAEC6A5),
               padding: EdgeInsets.symmetric(vertical: 50.0),
               child: Center(
                 child: Text(

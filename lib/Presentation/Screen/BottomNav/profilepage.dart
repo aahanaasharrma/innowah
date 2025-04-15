@@ -107,7 +107,7 @@ class ProfilePage extends StatelessWidget {
           SizedBox(height: 10), // Increased spacing between list items
           ListTile(
             leading: Icon(Icons.local_dining),
-            title: Text('VegBites Salad'),
+            title: Text('Veg Salad'),
             subtitle: Text('Today, 9:00 AM'),
             trailing: Text('-200'),
           ),

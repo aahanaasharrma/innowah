@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class LeaderboardScreen extends StatelessWidget {
   final List<Map<String, dynamic>> users = [
-    {'name': 'Alice', 'carbonFootprint': 10},
-    {'name': 'Bob', 'carbonFootprint': 15},
-    {'name': 'Charlie', 'carbonFootprint': 20},
-    {'name': 'David', 'carbonFootprint': 25},
-    {'name': 'Eve', 'carbonFootprint': 30},
+    {'name': 'Aahanaa', 'carbonFootprint': 10},
+    {'name': 'Vedaant', 'carbonFootprint': 15},
+    {'name': 'dg0443', 'carbonFootprint': 20},
+    {'name': 'Devangana', 'carbonFootprint': 25},
+    {'name': 'Megha', 'carbonFootprint': 30},
   ];
 
   final List<Color> medalColors = [

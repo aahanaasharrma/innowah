@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  User? getCurrentUser() {
+    return FirebaseAuth.instance.currentUser;
+  }
 
 
   Future<String?> signUp(String email, String password) async {
@@ -23,11 +28,15 @@ class AuthService {
     }
   }
 
+  Future<DocumentSnapshot> getUserProfile(String uid) {
+    return FirebaseFirestore.instance.collection('users').doc(uid).get();
+  }
 
 
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
 
   Future<void> sendPasswordResetEmail(String email) async {
     try {

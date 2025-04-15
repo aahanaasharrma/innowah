@@ -3,6 +3,8 @@ import 'package:location/location.dart' as location;
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../../../../Services/firebase_service.dart';
+import '../../../../Services/model.dart';
 import 'car_route.dart';
 
 class ScheduleRidePage extends StatefulWidget {
@@ -14,6 +16,7 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
   TextEditingController _fromController = TextEditingController();
   TextEditingController _toController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
+  DateTime? _selectedDate;
   int _numberOfPeople = 1;
 
   @override
@@ -33,13 +36,8 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
 
       if (placemarks.isNotEmpty) {
         Placemark placemark = placemarks[0];
-        String street = placemark.street ?? '';
-        String locality = placemark.locality ?? '';
-        String administrativeArea = placemark.administrativeArea ?? '';
-        String postalCode = placemark.postalCode ?? '';
-        String country = placemark.country ?? '';
         String formattedAddress =
-            '$street, $locality, $administrativeArea $postalCode, $country';
+            '${placemark.street ?? ''}, ${placemark.locality ?? ''}, ${placemark.administrativeArea ?? ''} ${placemark.postalCode ?? ''}, ${placemark.country ?? ''}';
         setState(() {
           _fromController.text = formattedAddress;
         });
@@ -52,14 +50,16 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime.now().add(Duration(hours: 1)),
       firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now().add(Duration(days: 7)),
     );
-    if (picked != null && picked != DateTime.now())
+    if (picked != null) {
       setState(() {
+        _selectedDate = picked;
         _dateController.text = intl.DateFormat('yyyy-MM-dd').format(picked);
       });
+    }
   }
 
   @override
@@ -70,19 +70,19 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
         children: [
           Image.asset(
             'assets/images/car.png',
-            height: 300, // Adjust size as needed
-            width: 300, // Adjust size as needed
+            height: 300,
+            width: 300,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               padding: EdgeInsets.all(16),
-              color: Colors.grey[200], // Light grey color
+              color: Colors.grey[200],
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Schedule Ride',
+                    'Publish Ride',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -90,7 +90,6 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
                   ),
                   SizedBox(height: 16),
                   TextField(
-
                     decoration: InputDecoration(
                       labelText: 'Leaving From',
                     ),
@@ -104,7 +103,6 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
                       labelText: 'Going To',
                       hintText: 'Set your destination',
                     ),
-                    // Add onTap if you want to select the location
                   ),
                   SizedBox(height: 16),
                   TextField(
@@ -149,22 +147,42 @@ class _ScheduleRidePageState extends State<ScheduleRidePage> {
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
+                      final from = _fromController.text.trim();
+                      final to = _toController.text.trim();
+
+                      if (from.isEmpty || to.isEmpty || _selectedDate == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Please fill all the details")),
+                        );
+                        return;
+                      }
+
+                      final ride = Ride(
+                        id: '', // leave empty to auto-generate ID
+                        departureLocation: from,
+                        destination: to,
+                        departureTime: _selectedDate!, // This is a DateTime, it will be converted to Timestamp in FirebaseService
+
+                        status: 'Published',
+                        matched: false,
+                      );
+
+                      FirebaseService().publishRide(ride);
+                      FirebaseService().matchRides(ride); // Assuming you have logic to match rides
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              CarRoute(destination: _toController.text),
+                          builder: (context) => CarRoute(destination: to),
                         ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF3A4F3B), // Button color
+                      backgroundColor: Color(0xFF3A4F3B),
                     ),
                     child: Text(
-                      'Schedule',
-                      style: TextStyle(
-                        color: Colors.white, // Text color
-                      ),
+                      'Publish Ride',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

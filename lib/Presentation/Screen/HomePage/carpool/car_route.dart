@@ -36,33 +36,41 @@ class _CarRouteState extends State<CarRoute> {
         _currentLocation = locationData;
         _addMarker(LatLng(locationData.latitude!, locationData.longitude!));
       });
+
+      _getDestinationCoordinates(widget.destination); // Fetch destination coordinates after location is set
     } catch (e) {
       print("Error getting location: $e");
     }
   }
 
   Future<void> _getDestinationCoordinates(String destination) async {
-    List<Location> locations = await locationFromAddress(destination);
-    if (locations.isNotEmpty) {
-      Location destinationLocation = locations[0];
-      _addMarker(LatLng(
-        destinationLocation.latitude,
-        destinationLocation.longitude,
-      ));
-      _plotRoute(_currentLocation!.latitude!, _currentLocation!.longitude!,
-          destinationLocation.latitude, destinationLocation.longitude);
+    try {
+      List<Location> locations = await locationFromAddress(destination);
+      if (locations.isNotEmpty) {
+        Location destinationLocation = locations[0];
+        _addMarker(LatLng(
+          destinationLocation.latitude,
+          destinationLocation.longitude,
+        ));
+        _plotRoute(_currentLocation!.latitude!, _currentLocation!.longitude!,
+            destinationLocation.latitude, destinationLocation.longitude);
+      }
+    } catch (e) {
+      print("Error getting destination coordinates: $e");
     }
   }
 
   void _addMarker(LatLng position) async {
-    _markers.clear();
-    _markers.add(
-      Marker(
-        markerId: MarkerId("currentLocation"),
-        position: position,
-        icon: BitmapDescriptor.defaultMarker,
-      ),
-    );
+    setState(() {
+      _markers.clear();
+      _markers.add(
+        Marker(
+          markerId: MarkerId("currentLocation"),
+          position: position,
+          icon: BitmapDescriptor.defaultMarker,
+        ),
+      );
+    });
   }
 
   void _plotRoute(double fromLat, double fromLng, double toLat, double toLng) async {
@@ -70,15 +78,30 @@ class _CarRouteState extends State<CarRoute> {
     final url =
         'https://maps.googleapis.com/maps/api/directions/json?origin=$fromLat,$fromLng&destination=$toLat,$toLng&key=$apiKey';
 
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final routes = data['routes'];
-      if (routes != null && routes.isNotEmpty) {
-        final points = _decodePolyline(routes[0]['overview_polyline']['points']);
-        print("Polyline points: $points");
-        _addPolylineToMap(points);
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final routes = data['routes'];
+        if (routes != null && routes.isNotEmpty) {
+          final points = _decodePolyline(routes[0]['overview_polyline']['points']);
+          print("Polyline points: $points");
+          _addPolylineToMap(points);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No route found. Please try again later.')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error fetching route, please try again later.')),
+        );
       }
+    } catch (e) {
+      print("Error fetching route: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching route, please check your connection.')),
+      );
     }
   }
 
@@ -129,12 +152,8 @@ class _CarRouteState extends State<CarRoute> {
 
   @override
   Widget build(BuildContext context) {
-    _getDestinationCoordinates(widget.destination); // Fetch destination coordinates
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Carpooling'),
-      ),
+      appBar: AppBar(title: Text('Carpooling')),
       body: _currentLocation == null
           ? Center(child: CircularProgressIndicator())
           : GoogleMap(
